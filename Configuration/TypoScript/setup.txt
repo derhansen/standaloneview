@@ -1,0 +1,7 @@
+plugin.tx_standaloneview {
+	view {
+		templateRootPath = {$plugin.tx_standaloneview.view.templateRootPath}
+		partialRootPath = {$plugin.tx_standaloneview.view.partialRootPath}
+		layoutRootPath = {$plugin.tx_standaloneview.view.layoutRootPath}
+	}
+}

@@ -1,0 +1,7 @@
+plugin.tx_standaloneview {
+	view {
+		templateRootPath = EXT:standaloneview/Resources/Private/Templates/
+		partialRootPath = EXT:standaloneview/Resources/Private/Partials/
+		layoutRootPath = EXT:standaloneview/Resources/Private/Layouts/
+	}
+}

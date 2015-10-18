@@ -1,0 +1,22 @@
+{namespace e=DERHANSEN\SfEventMgt\ViewHelpers}
+<f:layout name="Backend" />
+
+<f:section name="main">
+	<h1>Fluid StandloneView demonstration</h1>
+
+	<p>Demonstrates how to a Fluid StandaloneView renders translations in the TYPO3 backend context.</p>
+	<p>The following code is used in the StandalineView.html fluid template:</p>
+
+	&lt;strong&gt;&lt;f:translate key="title" /&gt;&lt;/strong&gt;<br>
+	&lt;p&gt;&lt;f:translate key="description" /&gt;&lt;/p&gt;
+
+	<p>Choose a language from the select field and press the "render" button</p>
+
+	<f:form name="formdata" object="{formdata}">
+			<f:form.select name="language" options="{languages}" property="language" />
+			<f:form.submit value="Render" />
+	</f:form>
+
+	<h2>Result:</h2>
+	<f:format.html>{result}</f:format.html>
+</f:section>

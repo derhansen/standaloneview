@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2015-10-17T18:30:01Z" product-name="standaloneview">
+		<header/>
+		<body>
+			<trans-unit id="title">
+				<source>English title (default)</source>
+				<target>Deutscher titel</target>
+			</trans-unit>
+			<trans-unit id="description">
+				<source>This is the english description (default language)</source>
+				<target>Dieses ist die deutsche Beschreibung</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
