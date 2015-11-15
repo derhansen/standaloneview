@@ -12,7 +12,7 @@ if (!defined('TYPO3_MODE')) {
 	'standaloneview_m1',
 	'',
 	array(
-		'Backend' => 'index',
+		'Backend' => 'index,multiple',
 	),
 	array(
 		'access' => 'user,group',

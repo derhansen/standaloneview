@@ -14,9 +14,6 @@ namespace Derhansen\Standaloneview\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
-use \TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-
 /**
  * BackendController
  *
@@ -31,7 +28,10 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	protected $standaloneViewService;
 
 	/**
+	 * Renders a standalone view with the given language
+	 *
 	 * @param array $formdata
+	 * @return void
 	 */
 	public function indexAction($formdata = NULL) {
 		$languages = array(
@@ -51,4 +51,23 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 		$this->view->assign('result', $result);
 	}
 
+	/**
+	 * Renders multiple standalone views in one run switching the language several times
+	 *
+	 * @return void
+	 */
+	public function multipleAction() {
+		$languages = array(
+				'' => 'Default',
+				'de' => 'Deutsch',
+				'dk' => 'Dansk'
+		);
+
+		$result = '';
+		foreach ($languages as $language => $value) {
+			$result .= $this->standaloneViewService->renderStandaloneView($language);
+		}
+		$this->view->assign('languages', $languages);
+		$this->view->assign('result', $result);
+	}
 }

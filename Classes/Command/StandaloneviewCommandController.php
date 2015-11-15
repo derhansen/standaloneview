@@ -38,4 +38,21 @@ class StandaloneviewCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\
 		$this->outputLine($result);
 	}
 
+	/**
+	 * The renderMultiple command
+	 *
+	 * @return void
+	 */
+	public function renderMultipleCommand() {
+		$languages = array(
+				'' => '',
+				'de' => 'de',
+				'dk' => 'dk'
+		);
+
+		foreach ($languages as $language) {
+			$result = $this->standaloneViewService->renderStandaloneView($language);
+			$this->outputLine($result);
+		}
+	}
 }
