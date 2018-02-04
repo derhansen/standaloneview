@@ -14,58 +14,76 @@ namespace Derhansen\Standaloneview\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Derhansen\Standaloneview\Utility\LocalizationUtility;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
-use \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * StandaloneViewService
  *
  * @author Torben Hansen <derhansen@gmail.com>
  */
-class StandaloneViewService {
+class StandaloneViewService
+{
+    /**
+     * The object manager
+     *
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * */
+    protected $objectManager;
 
-	/**
-	 * The object manager
-	 *
-	 * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-	 * @inject
-	 */
-	protected $objectManager;
+    /**
+     * The configuration manager
+     *
+     * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager
+     * */
+    protected $configurationManager;
 
-	/**
-	 * The configuration manager
-	 *
-	 * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager
-	 * @inject
-	 */
-	protected $configurationManager;
+    /**
+     * @param \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager
+     */
+    public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManager $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
 
-	/**
-	 * Renders a Fluid StandaloneView respecting the given language
-	 *
-	 * @param string $language The language (e.g. de, dk or se)
-	 * @return string
-	 * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
-	 */
-	public function renderStandaloneView($language = '') {
+    /**
+     * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager
+     */
+    public function injectConfigurationManager(
+        \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager
+    ) {
+        $this->configurationManager = $configurationManager;
+    }
 
-		if ($language !== '') {
-			// Temporary set Language of current BE user to given language
-			$GLOBALS['BE_USER']->uc['lang'] = $language;
-		}
+    /**
+     * Renders a Fluid StandaloneView respecting the given language
+     *
+     * @param string $language The language (e.g. de, dk or se)
+     * @return string
+     */
+    public function renderStandaloneView($language = '')
+    {
+        // Set the extensionKey
+        $extensionKey = GeneralUtility::underscoredToUpperCamelCase('standaloneview');
 
-		/** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
-		$view = $this->objectManager->get('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
-		$view->setFormat('html');
-		$extbaseFrameworkConfiguration = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-		$templateRootPath = GeneralUtility::getFileAbsFileName($extbaseFrameworkConfiguration['plugin.']['tx_standaloneview.']['view.']['templateRootPath']);
-		$view->setTemplatePathAndFilename($templateRootPath . 'StandaloneView.html');
+        if ($language !== '') {
+            // Temporary set Language of current BE user to given language
+            $GLOBALS['BE_USER']->uc['lang'] = $language;
+            LocalizationUtility::resetLocalizationCache($extensionKey);
+        }
 
-		// Set Extension name, so localizations for extension get respected
-		$extensionKey = 'standaloneview';
-		$view->getRequest()->setControllerExtensionName(GeneralUtility::underscoredToUpperCamelCase($extensionKey));
+        /** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
+        $view = $this->objectManager->get(StandaloneView::class);
+        $view->setFormat('html');
+        $template = GeneralUtility::getFileAbsFileName(
+            'EXT:standaloneview/Resources/Private/Templates/StandaloneView.html'
+        );
+        $view->setTemplatePathAndFilename($template);
 
-		return $view->render();
-	}
+        // Set Extension name, so localizations for extension get respected
+        $view->getRequest()->setControllerExtensionName($extensionKey);
 
+        return $view->render();
+    }
 }

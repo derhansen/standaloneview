@@ -19,40 +19,50 @@ namespace Derhansen\Standaloneview\Command;
  *
  * @author Torben Hansen <derhansen@gmail.com>
  */
-class StandaloneviewCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\CommandController {
+class StandaloneviewCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\CommandController
+{
+    /**
+     * @var \Derhansen\Standaloneview\Service\StandaloneViewService
+     * */
+    protected $standaloneViewService;
 
-	/**
-	 * @var \Derhansen\Standaloneview\Service\StandaloneViewService
-	 * @inject
-	 */
-	protected $standaloneViewService;
+    /**
+     * @param \Derhansen\Standaloneview\Service\StandaloneViewService $standaloneViewService
+     */
+    public function injectStandaloneViewService(
+        \Derhansen\Standaloneview\Service\StandaloneViewService $standaloneViewService
+    ) {
+        $this->standaloneViewService = $standaloneViewService;
+    }
 
-	/**
-	 * The render command
-	 *
-	 * @param string $language The language
-	 * @return void
-	 */
-	public function renderCommand($language = '') {
-		$result = $this->standaloneViewService->renderStandaloneView($language);
-		$this->outputLine($result);
-	}
+    /**
+     * The render command
+     *
+     * @param string $language The language
+     * @return void
+     */
+    public function renderCommand($language = '')
+    {
+        $result = $this->standaloneViewService->renderStandaloneView($language);
+        $this->outputLine($result);
+    }
 
-	/**
-	 * The renderMultiple command
-	 *
-	 * @return void
-	 */
-	public function renderMultipleCommand() {
-		$languages = array(
-				'' => '',
-				'de' => 'de',
-				'dk' => 'dk'
-		);
+    /**
+     * The renderMultiple command
+     *
+     * @return void
+     */
+    public function renderMultipleCommand()
+    {
+        $languages = array(
+            '' => '',
+            'de' => 'de',
+            'dk' => 'dk'
+        );
 
-		foreach ($languages as $language) {
-			$result = $this->standaloneViewService->renderStandaloneView($language);
-			$this->outputLine($result);
-		}
-	}
+        foreach ($languages as $language) {
+            $result = $this->standaloneViewService->renderStandaloneView($language);
+            $this->outputLine($result);
+        }
+    }
 }

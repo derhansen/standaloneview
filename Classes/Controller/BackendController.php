@@ -19,55 +19,66 @@ namespace Derhansen\Standaloneview\Controller;
  *
  * @author Torben Hansen <derhansen@gmail.com>
  */
-class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
+class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+{
 
-	/**
-	 * @var \Derhansen\Standaloneview\Service\StandaloneViewService
-	 * @inject
-	 */
-	protected $standaloneViewService;
+    /**
+     * @var \Derhansen\Standaloneview\Service\StandaloneViewService
+     * */
+    protected $standaloneViewService;
 
-	/**
-	 * Renders a standalone view with the given language
-	 *
-	 * @param array $formdata
-	 * @return void
-	 */
-	public function indexAction($formdata = NULL) {
-		$languages = array(
-			'' => 'Default',
-			'de' => 'Deutsch',
-			'dk' => 'Dansk'
-		);
+    /**
+     * @param \Derhansen\Standaloneview\Service\StandaloneViewService $standaloneViewService
+     */
+    public function injectStandaloneViewService(
+        \Derhansen\Standaloneview\Service\StandaloneViewService $standaloneViewService
+    ) {
+        $this->standaloneViewService = $standaloneViewService;
+    }
 
-		$language = '';
-		if (isset($formdata['language'])) {
-			$language = $formdata['language'];
-		}
+    /**
+     * Renders a standalone view with the given language
+     *
+     * @param array $formdata
+     * @return void
+     */
+    public function indexAction($formdata = null)
+    {
+        $languages = array(
+            '' => 'Default',
+            'de' => 'Deutsch',
+            'dk' => 'Dansk'
+        );
 
-		$result = $this->standaloneViewService->renderStandaloneView($language);
-		$this->view->assign('formdata', $formdata);
-		$this->view->assign('languages', $languages);
-		$this->view->assign('result', $result);
-	}
+        $language = '';
+        if (isset($formdata['language'])) {
+            $language = $formdata['language'];
+        }
 
-	/**
-	 * Renders multiple standalone views in one run switching the language several times
-	 *
-	 * @return void
-	 */
-	public function multipleAction() {
-		$languages = array(
-				'' => 'Default',
-				'de' => 'Deutsch',
-				'dk' => 'Dansk'
-		);
+        $result = $this->standaloneViewService->renderStandaloneView($language);
+        $this->view->assign('formdata', $formdata);
+        $this->view->assign('languages', $languages);
+        $this->view->assign('result', $result);
+    }
 
-		$result = '';
-		foreach ($languages as $language => $value) {
-			$result .= $this->standaloneViewService->renderStandaloneView($language);
-		}
-		$this->view->assign('languages', $languages);
-		$this->view->assign('result', $result);
-	}
+    /**
+     * Renders multiple standalone views in one run switching the language several times
+     *
+     * @return void
+     */
+    public function multipleAction()
+    {
+        $languages = array(
+            '' => 'Default',
+            'de' => 'Deutsch',
+            'dk' => 'Dansk',
+        );
+
+        $result = '';
+        foreach ($languages as $language => $value) {
+            $result .= $this->standaloneViewService->renderStandaloneView($language);
+        }
+        $this->view->assign('languages', $languages);
+        $this->view->assign('result', $result);
+    }
 }
